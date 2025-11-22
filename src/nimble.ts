@@ -10,6 +10,9 @@ import renderNimbleTokenHUD from './hooks/renderNimbleTokenHUD.js';
 
 import { hotbarDrop } from './hooks/hotBarDrop.ts';
 
+// ⭐ NEW — import our barebones Combat implementation
+import { NimbleCombat } from './nimble-combat';
+
 /** ----------------------------------- */
 //                Hooks
 /** ----------------------------------- */
@@ -23,3 +26,25 @@ Hooks.on('renderChatMessageHTML', renderChatMessageHTML);
 Hooks.on('renderNimbleTokenHUD', renderNimbleTokenHUD);
 
 Hooks.on('hotbarDrop', hotbarDrop);
+
+// ⭐ NEW — register barebones combat support
+Hooks.once('init', () => {
+  // @ts-ignore
+  CONFIG.Combat ??= {};
+  // @ts-ignore
+  CONFIG.Combat.documentClass = NimbleCombat;
+
+  // @ts-ignore
+  CONFIG.ui ??= {};
+  // @ts-ignore
+  CONFIG.ui.combat = CombatTracker;
+
+  // Optional: default initiative config
+  // @ts-ignore
+  CONFIG.Combat.initiative = {
+    formula: "1d20",
+    decimals: 2
+  };
+
+  console.log("Nimble | Barebones combat support registered");
+});
